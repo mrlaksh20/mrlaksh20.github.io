@@ -89,7 +89,7 @@
 <body>
 
 <header>
-  <h1>LakshXploit</h1>
+  <h1>Xploit</h1>
   <p></p>
 </header>
 
@@ -98,36 +98,62 @@
   <!-- Utilities -->
   <h2>Utilities</h2>
   <div class="tool-grid">
-    <div class="tool-btn">
-      <h3>JSON Beautifier</h3>
-      <span>Pretty print JSON (Burp-style view)</span>
-    </div>
-
-    <div class="tool-btn">
-      <h3>JWT Decoder</h3>
-      <span>Decode header & payload</span>
-    </div>
-
-    <div class="tool-btn">
-      <h3>Base64 Encode / Decode</h3>
-      <span>Quick transformations</span>
-    </div>
-
-    <div class="tool-btn">
+    <div class="tool-btn" onclick="openDecimalEncoder()">
       <h3>Decimal Encoder</h3>
       <span>Char ↔ Decimal encoding</span>
     </div>
   </div>
+<div id="dynamicTool">
+<script>
+  function decimalEncode(input) {
+    let result = "";
+    for (let char of input) {
+      let code = char.charCodeAt(0);
+      result += "&#" + code.toString().padStart(6, "0") + ";";
+    }
+    return result;
+  }
 
-  <!-- Reporting -->
-  <h2>Reporting</h2>
-  <div class="tool-grid">
- <a href="report.html" style="text-decoration: none;">
-	  <div class="tool-btn">
-	 <h3>Report Prompt Template</h3>
+  function openDecimalEncoder() {
+    const container = document.getElementById("dynamicTool");
+
+    // Toggle off if already open
+    if (container.innerHTML.trim() !== "") {
+      container.innerHTML = "";
+      return;
+    }
+
+    container.innerHTML = `
+      <h2>Decimal Entity Encoder</h2>
+
+      <textarea id="decInput" style="width: 316px; height: 31px;" placeholder="Enter payload here..."></textarea>
+
+      <button onclick="runDecimalEncode()">Encode</button>
+      <button onclick="closeDynamicTool()">Close</button>
+
+      <textarea id="decOutput" style="width: 650px; height: 75px;" placeholder="Encoded output..." readonly></textarea>
+    `;
+  }
+
+  function runDecimalEncode() {
+    const input = document.getElementById("decInput").value;
+    document.getElementById("decOutput").value = decimalEncode(input);
+  }
+
+  function closeDynamicTool() {
+    document.getElementById("dynamicTool").innerHTML = "";
+  }
+</script>
+</div>
+<h2>Reporting</h2>
+<div class="tool-grid">
+  <a href="report.html" style="text-decoration: none;">
+    <div class="tool-btn">
+      <h3>Report Prompt Template</h3>
       <span>Standardized vuln reporting</span>
     </div>
-  </div>
+  </a>
+</div>
 
   <!-- Payloads -->
   <h2>Payloads</h2>
@@ -144,11 +170,9 @@
   </div>
 
 </div>
-
 <footer>
   Built by Laksh • Ethical use only
 </footer>
 
 </body>
 </html>
-
