@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Report Prompt Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body {
+    margin: 0;
+    font-family: Consolas, monospace;
+    background: #000000;
+    color: #c9d1d9;
+  }
+
+  header {
+    padding: 20px;
+    border-bottom: 1px solid #FFAB00;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #0FFCBE;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  h2 {
+    margin-top: 30px;
+    font-size: 16px;
+    color: #D8125B;
+    border-left: 4px solid #B4121B;
+    padding-left: 10px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-size: 13px;
+    color: #FFCC00;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: #323232;
+    border: 1px solid #0FFCBE;
+    color: #ffffff;
+    padding: 8px;
+    margin-top: 5px;
+    font-family: Consolas, monospace;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .step {
+    margin-top: 10px;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 8px 12px;
+    background: #000000;
+    border: 1px solid #0FFCBE;
+    color: #0FFCBE;
+    cursor: pointer;
+    font-family: Consolas, monospace;
+  }
+
+  button:hover {
+    background: #0FFCBE;
+    color: #000000;
+  }
+
+  #output {
+    margin-top: 30px;
+    background: #000000;
+    border: 1px solid #58a6ff;
+    padding: 15px;
+    white-space: pre-wrap;
+    font-size: 13px;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Report Prompt Generator</h1>
+</header>
+
+<div class="container">
+
+  <h2>Finding Details</h2>
+
+  <label>Finding Name</label>
+  <input id="findingName" placeholder="e.g. Broken Access Control">
+
+  <label>Severity</label>
+  <select id="severity">
+    <option>Critical</option>
+    <option>High</option>
+    <option>Medium</option>
+    <option>Low</option>
+    <option>Informational</option>
+  </select>
+  <h2>Steps of Proof of Concept (PoC)</h2>
+
+  <div id="steps"></div>
+
+  <button onclick="addStep()">+ Add Step</button>
+
+  <h2>Generate</h2>
+  <button onclick="generatePrompt()">Generate Prompt</button>
+  <button onclick="copyPrompt()">Copy Prompt</button>
+  <div id="output"></div>
+
+</div>
+<script>
+  function addStep() {
+    const div = document.createElement("div");
+    div.className = "step";
+    div.innerHTML = `<textarea placeholder="Describe PoC step..."></textarea>`;
+    document.getElementById("steps").appendChild(div);
+  }
+
+  function generatePrompt() {
+    const finding = document.getElementById("findingName").value;
+    const severity = document.getElementById("severity").value;
+    const stepBoxes = document.querySelectorAll("#steps textarea");
+
+    let stepsText = "";
+    stepBoxes.forEach((s, i) => {
+      stepsText += `Step ${i + 1}:${s.value}\n\n`;
+    });
+
+    const prompt = `FINDING NAME
+
+${finding}
+
+SEVERITY
+
+${severity}
+
+DESCRIPTION
+<5–6 lines explaining what the vulnerability is, how it occurs in the application, what was observed during testing, and why it exists.>
+
+STEPS OF PROOF OF CONCEPT (PoC)
+
+${stepsText}
+IMPACT
+<Impact Title 1>:
+
+<Minimum 2 lines explaining a real security, business, or operational risk caused by this issue.>
+
+<Impact Title 2>:
+
+<Minimum 2 lines explaining another distinct consequence such as data exposure, fraud, availability, compliance, or reputation impact.>
+
+<Impact Title 3>:
+
+<Minimum 2 lines explaining broader or long-term risk if the issue is exploited or left unaddressed.>
+
+RECOMMENDATION
+<Recommendation Title 1>:
+
+<Minimum 2 lines explaining a clear, actionable technical fix or control to address the root cause.>
+
+<Recommendation Title 2>:
+
+<Minimum 2 lines explaining additional hardening, validation, or control improvements.>
+
+<Recommendation Title 3>:
+
+<Minimum 2 lines explaining preventive or defense-in-depth measures such as monitoring, testing, or configuration reviews.>
+
+GUARANTEED RULES I’LL FOLLOW FOR YOU
+Locked in for all future report days ✅
+Same number of PoC steps as you provide
+Grammar fixed, meaning unchanged
+No bullets or numbering except PoC steps
+Impact & Recommendation always use bold titles
+Each point always at least 2 lines
+Severity-appropriate tone (Critical ≠ Low)
+Clean, client-safe, audit-safe VAPT language
+`;
+
+    document.getElementById("output").textContent = prompt;
+  }
+ function copyPrompt() {
+  const output = document.getElementById("output");
+
+  if (!output.textContent.trim()) {
+    alert("Nothing to copy. Generate the prompt first.");
+    return;
+  }
+
+  navigator.clipboard.writeText(output.textContent)
+    .then(() => {
+      console.log("Prompt copied to clipboard ✅");
+    })
+    .catch(() => {
+      console.log("Copy failed. Try manually.");
+    });
+}
+  addStep();
+</script>
+</body>
+</html>
