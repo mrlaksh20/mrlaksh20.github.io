@@ -98,12 +98,20 @@
   <!-- Utilities -->
   <h2>Utilities</h2>
   <div class="tool-grid">
+    <!-- Existing Decimal Encoder -->
     <div class="tool-btn" onclick="openDecimalEncoder()">
       <h3>Decimal Encoder</h3>
       <span>Char ↔ Decimal encoding</span>
     </div>
+
+    <!-- New JSON Unicoding Button -->
+    <a href="json_unicoding.html" style="text-decoration: none;">
+      <div class="tool-btn">
+        <h3>JSON Unicoding</h3>
+        <span>String ↔ \uXXXX encoding</span>
+      </div>
+    </a>
   </div>
-<div id="dynamicTool">
 <script>
   function decimalEncode(input) {
     let result = "";
@@ -176,3 +184,4 @@
 
 </body>
 </html>
+
