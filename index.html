@@ -6,43 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
-      margin: 0;
-      font-family: Consolas, monospace;
-      background: #000000;
-      color: #58a6ff;
-    }
-
-    header {
-      padding: 20px;
-      border-bottom: 1px solid #FFAB00;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-      color: #0FFCBE;
-    }
-
-    header p {
-      margin: 5px 0 0;
-      color: #8b949e;
-    }
-
-    .container {
-      padding: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    h2 {
-      margin-top: 40px;
-      font-size: 18px;
-      color: #D8125B;
-      border-left: 4px solid #D8125B;
-      padding-left: 10px;
-    }
-
+    body { margin: 0; font-family: Consolas, monospace; background: #000000; color: #58a6ff; }
+    header { padding: 20px; border-bottom: 1px solid #FFAB00; }
+    header h1 { margin: 0; font-size: 24px; color: #0FFCBE; }
+    header p { margin: 5px 0 0; color: #8b949e; }
+    .container { padding: 20px; max-width: 1100px; margin: auto; }
+    h2 { margin-top: 40px; font-size: 18px; color: #D8125B; border-left: 4px solid #D8125B; padding-left: 10px; }
+    
     .tool-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -57,32 +27,19 @@
       text-align: left;
       cursor: pointer;
       transition: 0.2s;
+      height: 100%; /* Ensures uniform box size */
+      box-sizing: border-box;
     }
 
-    .tool-btn:hover {
-      border-color: #58a6ff;
-      background: #000000;
-    }
-
-    .tool-btn h3 {
-      margin: 0 0 5px;
-      font-size: 15px;
-      color: #FFCC00;
-    }
-
-    .tool-btn span {
-      font-size: 12px;
-      color: #FFFFFF;
-    }
-
-    footer {
-      margin-top: 60px;
-      padding: 15px;
-      border-top: 1px solid #21262d;
-      text-align: center;
-      font-size: 12px;
-      color: #8b949e;
-    }
+    .tool-btn:hover { border-color: #58a6ff; background: #000000; }
+    .tool-btn h3 { margin: 0 0 5px; font-size: 15px; color: #FFCC00; }
+    .tool-btn span { font-size: 12px; color: #FFFFFF; }
+    footer { margin-top: 60px; padding: 15px; border-top: 1px solid #21262d; text-align: center; font-size: 12px; color: #8b949e; }
+    
+    /* Styling for the drop-down encoder box */
+    #dynamicTool { margin-top: 15px; background: #161b22; border-radius: 4px; }
+    textarea { background: #0d1117; color: #0FFCBE; border: 1px solid #30363d; padding: 5px; margin: 5px 0; }
+    button { background: #238636; color: white; border: none; padding: 5px 15px; cursor: pointer; }
   </style>
 </head>
 
@@ -90,28 +47,57 @@
 
 <header>
   <h1>Xploit</h1>
-  <p></p>
 </header>
 
 <div class="container">
-
-  <!-- Utilities -->
+  <!-- Utilities Section -->
   <h2>Utilities</h2>
   <div class="tool-grid">
-    <!-- Existing Decimal Encoder -->
+    <!-- Decimal Encoder Box -->
     <div class="tool-btn" onclick="openDecimalEncoder()">
       <h3>Decimal Encoder</h3>
       <span>Char ↔ Decimal encoding</span>
     </div>
 
-    <!-- New JSON Unicoding Button -->
-    <a href="json_unicoding.html" style="text-decoration: none;">
+    <!-- JSON Unicoding Box -->
+    <a href="/json_unicoding.html" style="text-decoration: none;">
       <div class="tool-btn">
         <h3>JSON Unicoding</h3>
         <span>String ↔ \uXXXX encoding</span>
       </div>
     </a>
   </div>
+
+  <!-- This container handles the pop-out without breaking the layout -->
+  <div id="dynamicTool"></div>
+
+  <!-- Reporting Section -->
+  <h2>Reporting</h2>
+  <div class="tool-grid">
+    <a href="report.html" style="text-decoration: none;">
+      <div class="tool-btn">
+        <h3>Report Prompt Template</h3>
+        <span>Standardized vuln reporting</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Payloads Section -->
+  <h2>Payloads</h2>
+  <div class="tool-grid">
+    <div class="tool-btn">
+      <h3>Payload Library</h3>
+      <span>Injection & bypass payloads</span>
+    </div>
+    <div class="tool-btn">
+      <h3>Custom Payload Builder</h3>
+      <span>Context-aware payload crafting</span>
+    </div>
+  </div>
+</div>
+
+<footer>Built by Laksh • Ethical use only</footer>
+
 <script>
   function decimalEncode(input) {
     let result = "";
@@ -124,22 +110,18 @@
 
   function openDecimalEncoder() {
     const container = document.getElementById("dynamicTool");
-
-    // Toggle off if already open
     if (container.innerHTML.trim() !== "") {
       container.innerHTML = "";
       return;
     }
-
     container.innerHTML = `
-      <h2>Decimal Entity Encoder</h2>
-
-      <textarea id="decInput" style="width: 316px; height: 31px;" placeholder="Enter payload here..."></textarea>
-
-      <button onclick="runDecimalEncode()">Encode</button>
-      <button onclick="closeDynamicTool()">Close</button>
-
-      <textarea id="decOutput" style="width: 650px; height: 75px;" placeholder="Encoded output..." readonly></textarea>
+      <div style="padding:15px; border: 1px dashed #D8125B; margin-top:10px;">
+        <h3 style="color:#0FFCBE; margin-top:0;">Decimal Entity Encoder</h3>
+        <textarea id="decInput" style="width: 100%; max-width: 400px; height: 40px;" placeholder="Enter payload here..."></textarea><br>
+        <button onclick="runDecimalEncode()">Encode</button>
+        <button onclick="closeDynamicTool()" style="background:#da3633">Close</button><br>
+        <textarea id="decOutput" style="width: 100%; max-width: 650px; height: 80px; margin-top:10px;" placeholder="Encoded output..." readonly></textarea>
+      </div>
     `;
   }
 
@@ -152,36 +134,6 @@
     document.getElementById("dynamicTool").innerHTML = "";
   }
 </script>
-</div>
-<h2>Reporting</h2>
-<div class="tool-grid">
-  <a href="report.html" style="text-decoration: none;">
-    <div class="tool-btn">
-      <h3>Report Prompt Template</h3>
-      <span>Standardized vuln reporting</span>
-    </div>
-  </a>
-</div>
-
-  <!-- Payloads -->
-  <h2>Payloads</h2>
-  <div class="tool-grid">
-    <div class="tool-btn">
-      <h3>Payload Library</h3>
-      <span>Injection & bypass payloads</span>
-    </div>
-
-    <div class="tool-btn">
-      <h3>Custom Payload Builder</h3>
-      <span>Context-aware payload crafting</span>
-    </div>
-  </div>
-
-</div>
-<footer>
-  Built by Laksh • Ethical use only
-</footer>
 
 </body>
 </html>
-
