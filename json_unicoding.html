@@ -70,7 +70,7 @@
         for (let i = 0; i < input.length; i++) {
             encoded += "\\u" + input.charCodeAt(i).toString(16).padStart(4, '0');
         }
-        outputDiv.innerText = `"${encoded}"`;
+        outputDiv.innerText = `${encoded}`;
         status.innerText = ""; 
     }
 
