@@ -19,16 +19,8 @@
 </head>
 <body>
    <script>
-       // Step 1: Function to extract a specific cookie value by name
-function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
-}
-
-// Initialize and assign the variable before checking it
-var csrfToken = getCookie("zmcsr");
+       // Step 1: Function to extract a specific cookie value by namit
+var csrfToken = "d167fc4a19a5fe85975054b5664ea76133d97caac394d02c014f6c3b4f61f65e4aff4cc86cfdb327ffb566e54d65d62c40ba0d08b4bdbd9634d55b620cf0f597";
 
 if (csrfToken) {
     // === REQUEST 1: POST to target endpoint ===
